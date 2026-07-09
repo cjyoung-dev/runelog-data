@@ -1,4 +1,4 @@
-import { runemetricsResponseSchema} from './validation/runemetrics';
+import { runemetricsResponseSchema} from './src/validation/runemetrics';
 
 const json = {
 	"magic": 23529761,

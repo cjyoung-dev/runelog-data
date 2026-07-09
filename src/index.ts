@@ -1,18 +1,14 @@
-/**
- * Welcome to Cloudflare Workers! This is your first worker.
- *
- * - Run `npm run dev` in your terminal to start a development server
- * - Open a browser tab at http://localhost:8787/ to see your worker in action
- * - Run `npm run deploy` to publish your worker
- *
- * Bind resources to your worker in `wrangler.jsonc`. After adding bindings, a type definition for the
- * `Env` object can be regenerated with `npm run cf-typegen`.
- *
- * Learn more at https://developers.cloudflare.com/workers/
- */
+import {logger} from './lib/logger';
+import * as Sentry from '@sentry/cloudflare'
 
-export default {
-	async scheduled(event, env, ctx): Promise<void> {
-		console.log('worker woke up')
-	},
-} satisfies ExportedHandler<Env>;
+export default Sentry.withSentry(
+	(env) => ({
+		dsn: env.SENTRY_DSN,
+		tracesSampleRate: 1.0,
+	}),
+	{
+		async scheduled(event, env, ctx): Promise<void> {
+			logger.info('worker woke up')
+		},
+	} satisfies ExportedHandler<Env>
+);
