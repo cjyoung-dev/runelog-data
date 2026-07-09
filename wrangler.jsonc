@@ -15,8 +15,16 @@
 		"nodejs_compat"
 	],
 	"triggers": {
-		"crons": ["*/3 * * * *"]
-	}
+		"crons": [
+			"*/3 * * * *"
+		]
+	},
+	"hyperdrive": [
+		{
+			"binding": "HYPERDRIVE",
+			"id": "92bbf6e55de54d98ae75e3bcacccb404"
+		}
+	]
 	/**
 	 * Smart Placement
 	 * https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
