@@ -1,14 +1,26 @@
-import {logger} from './lib/logger';
-import * as Sentry from '@sentry/cloudflare'
+import { fetchPlayerData} from './runemetrics/client';
+import {getDb} from './db/client';
+import {playersTable} from './db/schema';
+import logger from './lib/logger';
 
-export default Sentry.withSentry(
-	(env) => ({
-		dsn: env.SENTRY_DSN,
-		tracesSampleRate: 1.0,
-	}),
-	{
-		async scheduled(event, env, ctx): Promise<void> {
-			logger.info('worker woke up')
-		},
-	} satisfies ExportedHandler<Env>
-);
+const debug = logger('index');
+
+export default {
+	async scheduled(event, env, ctx): Promise<void> {
+		const db = await getDb(env.HYPERDRIVE);
+		const players = await db.select().from(playersTable);
+
+		for (const p of players) {
+			try
+			{
+				debug(p);
+				const data = await fetchPlayerData(p.name);
+				debug(data);
+			}
+			catch(err)
+			{
+				debug(err);
+			}
+		}
+	},
+} satisfies ExportedHandler<Env>
