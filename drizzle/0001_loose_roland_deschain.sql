@@ -1,0 +1,1 @@
+ALTER TABLE "activities" ADD CONSTRAINT "activities_date_player_id_text_unique" UNIQUE("date","player_id","text");
